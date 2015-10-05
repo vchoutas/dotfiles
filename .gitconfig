@@ -1,0 +1,5 @@
+[user]
+	name = vasilish
+	email = vasilis4ch@gmail.com
+[alias]
+	tree = log --graph --color

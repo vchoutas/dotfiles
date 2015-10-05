@@ -1,0 +1,7 @@
+alias robotMaster='export ROS_MASTER_URI=http://192.168.0.106:11311'
+alias robot='ssh pandora@192.168.0.106 -A -X'
+alias exportTest='export ROS_MASTER_URI=http://localhost:22422'
+alias vimrc='vim ~/.vimrc'
+alias bashrc='vim ~/.bashrc'
+alias aliases='vim ~/.bash_aliases'
+alias gitStaged='git diff --cached --color'
