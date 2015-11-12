@@ -20,6 +20,10 @@ Plugin 'tpope/vim-surround'
 Plugin 'taketwo/vim-ros' "https://github.com/taketwo/vim-ros
 Plugin 'Yggdroot/indentLine' "https://github.com/Yggdroot/indentLine
 Plugin 'scrooloose/nerdtree' "https://github.com/scrooloose/nerdtree
+
+" Git Status flags for NerdTree
+Plugin 'Xuyuanp/nerdtree-git-plugin'
+
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'mhinz/vim-startify'
 Plugin 'xolox/vim-misc'
@@ -30,8 +34,6 @@ Plugin 'rdnetto/YCM-Generator'
 " Plugin 'KevinGoodsell/vim-csexact'
 " Airline bar theme
 Plugin 'paranoida/vim-airlineish'
-" Plugin for python dev
-" Plugin 'klen/python-mode'
 " View git diff on vim
 Plugin 'airblade/vim-gitgutter'
 " Track the engine.
@@ -39,16 +41,17 @@ Plugin 'SirVer/ultisnips'
 Plugin 'ntpeters/vim-better-whitespace'
 " Easy switching between header and source file
 Plugin 'vim-scripts/a.vim'
-" Undo Tree plugin
-Plugin 'sjl/gundo.vim'
-Plugin 'Chiel92/vim-autoformat'
 Plugin 'Raimondi/delimitMate'
-Plugin 'Shougo/vimproc'
-Plugin 'Shougo/vimshell'
-Plugin 'vim-scripts/LaTeX-Box'
+" Latex Support plugin for Vim
+Plugin 'LaTeX-Box-Team/LaTeX-Box'
 
+Plugin 'ryanoasis/vim-devicons'
+Plugin 'vim-scripts/DoxygenToolkit.vim'
+
+Plugin 'JuliaLang/julia-vim'
 
 " Snippets are separated from the engine. Add this if you want them:
+" Custom Snippets Repository
 Plugin 'vasilish/vim-snippets'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -106,7 +109,13 @@ set number
 set autoindent
 
 set background=dark
-" set t_Co=256
+
+if &term =~ '256color'
+  " disable Background Color Erase (BCE) so that color schemes
+  " render properly when inside 256-color tmux and GNU screen.
+  " see also http://snk.tuxfamily.org/log/vim-256color-bce.html
+  set t_ut=
+endif
 
 syntax on
 
@@ -140,6 +149,10 @@ hi PmenuSel term=bold cterm=bold ctermfg=16 ctermbg=8
 " highlight String cterm=bold ctermfg=161
 
 " Highlight current line
+set cursorline
+" Set the current line to bold and black background
+hi CursorLine cterm=bold ctermbg=16
+
 hi Visual term=bold cterm=bold ctermbg=8
 hi ExtraWhitespace cterm=bold term=bold ctermbg=9
 hi SpellBad term=bold cterm=bold ctermbg=9
@@ -157,7 +170,7 @@ let g:python_no_builtin_highlight = 1
 "Highlight Class Scope
 let g:cpp_class_scope_highlight = 1
 " Set the airline plugin theme
-let g:airline_theme = 'simple'
+let g:airline_theme = 'airlineish'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tagbar#enabled = 1
 let g:airline#extensions#syntastic#enabled = 1
@@ -165,10 +178,12 @@ let g:airline#extensions#syntastic#enabled = 1
 
 let g:airline_detect_modified=1
 let g:airline_detect_paste=1
+
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+
 set fillchars+=stl:\ ,stlnc:\
-
-
-
 
 
 " Always open Vim Airline Plugin
@@ -197,8 +212,15 @@ map <C-p> "+p
 "
 " Cuda filetype
 " au BufNewFile,BufRead *.cu set filetype=cuda
-au BufNewFile,BufRead *.cuh set filetype=cuda.cpp
-au BufNewFile,BufRead *.cu set ft=cuda.cpp
+autocmd BufRead,BufNewFile *.cu set filetype=cpp
+autocmd BufRead,BufNewFile *.cuh set filetype=cpp
+" au BufNewFile,BufRead *.cuh set filetype=cuda.cpp
+" au BufNewFile,BufRead *.cu set ft=cuda.cpp
+" au Syntax cuda
+      " \ if (exists('b:load_doxygen_syntax') && b:load_doxygen_syntax)
+      " \       || (exists('g:load_doxygen_syntax') && g:load_doxygen_syntax)
+      " \   | runtime! syntax/doxygen.vim
+      " \ | endif
 
 let g:ycm_key_list_select_completion = ['<Down>']
 let g:ycm_key_list_previous_completion = ['<Up>']
@@ -215,8 +237,6 @@ let g:jedi#auto_initialization = 0
 
 let g:tagbar_left = 1
 let g:tagbar_vertical = 10
-
-
 
 let NERDSpaceDelims=1
 
@@ -252,8 +272,9 @@ map <C-n> :NERDTreeToggle<CR>
 " find the current file in NERDTree
 nmap <leader>f :NERDTreeFind<CR>
 
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
+set encoding=utf-8
+set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ Plus\ Nerd\ File\ Types\ Mono\ Plus\ Font\ Awesome\ Plus\ Pomicons
 
-set langmap=ΑA,ΒB,ΨC,ΔD,ΕE,ΦF,ΓG,ΗH,ΙI,ΞJ,ΚK,ΛL,ΜM,ΝN,ΟO,ΠP,QQ,ΡR,ΣS,ΤT,ΘU,ΩV,WW,ΧX,ΥY,ΖZ,αa,βb,ψc,δd,εe,φf,γg,ηh,ιi,ξj,κk,λl,μm,νn,οo,πp,qq,ρr,σs,τt,θu,ωv,ςw,χx,υy,ζz
+
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+let g:DoxygenToolkit_authorName="Vassilis Choutas"
