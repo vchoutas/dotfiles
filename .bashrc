@@ -7,7 +7,7 @@ fi
 
 
 HISTCONTROL=ignoreboth
-HISTSIZE=1000
+HISTSIZE=10000
 HISTFILESIZE=2000
 
 # User specific aliases and functions
@@ -24,10 +24,9 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 
-source /etc/bash_completion.d/git
-# if [ -f ~/.git-completion.bash  ]; then
-    # . ~/.git-completion.bash
-# fi
+if [ -f ~/.git-completion.bash  ]; then
+  . ~/.git-completion.bash
+fi
 
 if [ "$color_prompt" = yes ]; then
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
@@ -82,6 +81,13 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
+if [ -f /etc/bash_completion.d/pip ]; then
+  . /etc/bash_completion.d/pip
+fi
+
+if [ -f ~/.git-prompt.sh ]; then
+  source /home/vchoutas/.git-prompt.sh
+fi
 
 export TERM=xterm-256color
 
@@ -90,11 +96,10 @@ export TERM=xterm-256color
 # fi
 
 
-
 #Show git branch and add color to terminal
 export GIT_PS1_SHOWDIRTYSTATE=1
 export GIT_PS1_SHOWUNTRACKEDFILES=1
-export GIT_PS1_SHOWUPSTREAM="auto"
+export GIT_PS1_SHOWUPSTREAM="auto verbose"
 
 function proml {
   local        BLUE="\[\033[0;34m\]"
@@ -110,19 +115,38 @@ function proml {
   local      MAGENTA="\[\033[0;35m\]"
   local  LIGHT_MAGENTA="\[\033[1;35m\]"
   local       WHITE="\[\033[1;37m\]"
-  local  LIGHT_GRAY="\[\033[0;37m\]"
+  local  LIGHT_GRAY="\[\033[1;37m\]"
 # END OPTIONAL
   local     DEFAULT="\[\033[0m\]"
 
-  PS1="$LIGHT_CYAN\u$LIGHT_RED@$LIGHT_MAGENTA\h$LIGHT_YELLOW:$LIGHT_GREEN[ \w ] $LIGHT_RED\$(__git_ps1)$DEFAULT$LIGHT_YELLOW\$\n$GREEN>>> $DEFAULT"
+  PS1="$LIGHT_YELLOW\u$LIGHT_GREEN@$LIGHT_RED\h$LIGHT_YELLOW:$LIGHT_GRAY[\w] $LIGHT_RED\$(__git_ps1 \"(%s)\")$DEFAULT$LIGHT_YELLOW\$\n$LIGHT_GRAY>>> $DEFAULT"
 }
-proml
+# proml
 
 
-
-export CXX=clang++
-export CC=clang
-
+export CXX=clang++-3.6
+export CC=clang-3.6
 
 export PATH=/usr/bin:$PATH
+
+export PATH=/usr/local/cuda-7.0/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/cuda-7.0/lib64:/usr/lib/nvidia-346:$LD_LIBRARY_PATH
+
+setxkbmap -model pc105 -layout us,gr -option grp:alt_shift_toggle
+if [ -f /opt/ros/indigo/setup.bash ]; then
+  source /opt/ros/indigo/setup.bash
+fi
+
+if [ -f /opt/ros/jade/setup.bash ]; then
+  source /opt/ros/jade/setup.bash
+fi
+
+if [ -f ~/Programming/pandora_ws/devel/setup.bash ]; then
+  source ~/Programming/pandora_ws/devel/setup.bash
+fi
+
+RBW_PATH=$HOME/.rainbow-bash
+source $RBW_PATH/init.sh
+
+PS1=$RBW_THEME_ADVANCED
 
