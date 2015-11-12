@@ -5,3 +5,6 @@ alias vimrc='vim ~/.vimrc'
 alias bashrc='vim ~/.bashrc'
 alias aliases='vim ~/.bash_aliases'
 alias gitStaged='git diff --cached --color'
+
+alias clang='clang-3.6'
+alias clang++='clang++-3.6'
