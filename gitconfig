@@ -3,3 +3,5 @@
 	email = vasilis4ch@gmail.com
 [alias]
 	tree = log --graph --color
+[core]
+	editor = vim

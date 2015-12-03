@@ -68,7 +68,7 @@ source $ZSH/oh-my-zsh.sh
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  export EDITOR='mvim'
+  export EDITOR='vim'
 fi
 
 # Compilation flags
@@ -100,6 +100,5 @@ export CXX=clang++-3.6
 export CC=clang-3.6
 
 setxkbmap -model pc105 -layout us,gr -option grp:alt_shift_toggle
-
 
 [ -z "$TMUX" ] && export TERM=xterm-256color && exec tmux

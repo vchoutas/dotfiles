@@ -124,7 +124,7 @@ set expandtab
 set shiftwidth=2
 set softtabstop=2
 set ruler
-set rtp+=$HOME/.local/lib/python2.7/site-packages/powerline/bindings/vim/
+" set rtp+=$HOME/.local/lib/python2.7/site-packages/powerline/bindings/vim/
 
 " colorscheme impactjs
 " colorscheme billw
@@ -197,10 +197,10 @@ set noswapfile
 set incsearch
 
 " Remap ctrl + arrow_key to move between windows
-nnoremap <c-right> <c-w>l
-nnoremap <c-down> <c-w>j
-nnoremap <c-left> <c-w>h
-nnoremap <c-up> <c-w>k
+nnoremap <C-Right> <c-w>l
+nnoremap <C-Down> <c-w>j
+nnoremap <C-Left> <c-w>h
+nnoremap <C-Up> <c-w>k
 " Ctrl-y to copy in + buffer from visual mode
 vmap <C-y> "+y
 
@@ -278,3 +278,5 @@ set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ Plus\ Nerd\ File\ Types\ Mono\ P
 
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:DoxygenToolkit_authorName="Vassilis Choutas"
+
+
