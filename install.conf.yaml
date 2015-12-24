@@ -1,0 +1,15 @@
+- clean: ['~']
+
+- link:
+    # ~/.dotfiles: ''
+    ~/.tmux.conf: tmux.conf
+    ~/.vimrc: vimrc
+    ~/.zshrc: zshrc
+    ~/.bashrc: bashrc
+    ~/.bash_aliases: bash_aliases
+    ~/.gitconfig: gitconfig
+    ~/.vim: vim/
+    ~/.zgen: zgen/
+
+- shell:
+  - [git submodule update --init --recursive, "Installing submodules"]
