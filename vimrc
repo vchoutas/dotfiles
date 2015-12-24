@@ -14,7 +14,10 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'nvie/vim-flake8'
 Plugin 'hdima/python-syntax'
 Plugin 'bling/vim-airline'
+" Colorschemes
 Plugin 'flazz/vim-colorschemes'
+Plugin 'zenorocha/dracula-theme', {'rtp': 'vim/'}
+
 Plugin 'tpope/vim-fugitive' "https://github.com/tpope/vim-fugitive
 Plugin 'tpope/vim-surround'
 Plugin 'taketwo/vim-ros' "https://github.com/taketwo/vim-ros
@@ -50,9 +53,11 @@ Plugin 'vim-scripts/DoxygenToolkit.vim'
 
 Plugin 'JuliaLang/julia-vim'
 
+" Autoswitch on ESC back to English KeyMap in order to insert Commands
+Plugin 'lyokha/vim-xkbswitch'
+
 " Snippets are separated from the engine. Add this if you want them:
-" Custom Snippets Repository
-Plugin 'vasilish/vim-snippets'
+Plugin 'honza/vim-snippets'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -106,7 +111,11 @@ else
   set clipboard+=unnamed
 endif
 set number
+
+
+" Copy Indent from previous line
 set autoindent
+set smartindent
 
 set background=dark
 
@@ -124,6 +133,8 @@ set expandtab
 set shiftwidth=2
 set softtabstop=2
 set ruler
+
+set title " show file in titlebar
 " set rtp+=$HOME/.local/lib/python2.7/site-packages/powerline/bindings/vim/
 
 " colorscheme impactjs
@@ -194,6 +205,7 @@ set showcmd
 set nobackup
 set nowritebackup
 set noswapfile
+
 set incsearch
 
 " Remap ctrl + arrow_key to move between windows
@@ -207,9 +219,6 @@ vmap <C-y> "+y
 "Ctrl-p to paste from the + register in cmd mode
 map <C-p> "+p
 
-""Ctrl-p to paste from the + register while editing
-" map <C-p> <esc><C-v>
-"
 " Cuda filetype
 " au BufNewFile,BufRead *.cu set filetype=cuda
 autocmd BufRead,BufNewFile *.cu set filetype=cpp
@@ -257,13 +266,6 @@ let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 let g:Ultisnips_python_style="doxygen"
 let g:UltiSnipsListSnippets="<c-b>"
 
-let g:vimshell_prompt =  $USER." $: "
-let g:vimshell_user_prompt='fnamemodify(getcwd(), ":~")'
-let g:vimshell_disable_escape_highlight = 1
-let g:vimshell_vimshrc_path = '/home/vchoutas/.vimshrc'
-
-nnoremap <F5> :GundoToggle<CR>
-
 nmap <C-t> :TagbarToggle<CR>
 " NERDTree
 " toggle NERDTree with Ctrl+n
@@ -278,5 +280,14 @@ set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ Plus\ Nerd\ File\ Types\ Mono\ P
 
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:DoxygenToolkit_authorName="Vassilis Choutas"
+" Remove TeX Preview in vim buffer
+let g:tex_conceal = ""
 
+" Greek Keyboard Support for Vim
+set langmap=ΑA,ΒB,ΨC,ΔD,ΕE,ΦF,ΓG,ΗH,ΙI,ΞJ,ΚK,ΛL,ΜM,ΝN,ΟO,ΠP,QQ,ΡR,ΣS,ΤT,ΘU,ΩV,WW,ΧX,ΥY,ΖZ,αa,βb,ψc,δd,εe,φf,γg,ηh,ιi,ξj,κk,λl,μm,νn,οo,πp,qq,ρr,σs,τt,θu,ωv,ςw,χx,υy,ζz
 
+" Enable xkb switch Plugin
+let g:XkbSwitchEnabled = 1
+
+" Disable XkbSwitch for nerdtree
+let g:XkbSwitchSkipFt = [ 'nerdtree' ]
