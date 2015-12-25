@@ -53,9 +53,15 @@ if ! zgen saved; then
 
     zgen oh-my-zsh plugins/pip
 
+    zgen load rimraf/k
 
+    zgen load djui/alias-tips
+
+    # Plugin for auto updating zgen
+    zgen load unixorn/autoupdate-zgen
     # Add plugins not included in oh-my-zsh
     zgen load zsh-users/zsh-syntax-highlighting
+    zgen load zsh-users/zsh-history-substring-search
 
     # Alpharized Theme
     # zgen load NicoSantangelo/Alpharized alpharized.zsh-theme
@@ -72,7 +78,21 @@ ZSH_HIGHLIGHT_STYLES[builtin]='fg=green,bold'
 # To have paths colored instead of underlined
 ZSH_HIGHLIGHT_STYLES[path]='fg=cyan,bold'
 
+# Bind keys for History Search plugin
+zmodload zsh/terminfo
+bindkey "$terminfo[kcuu1]" history-substring-search-up
+bindkey "$terminfo[kcud1]" history-substring-search-down
+
+# bind UP and DOWN arrow keys (compatibility fallback
+# for Ubuntu 12.04, Fedora 21, and MacOSX 10.9 users)
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
+HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='fg=blue,bold,bg=black'
+
 export TERM="xterm-256color"
+
+local LAMBDA="%(?,%{$fg_bold[green]%}λ,%{$fg_bold[red]%}λ)"
 
 if [ -f /opt/ros/indigo/setup.zsh ]; then
   source /opt/ros/indigo/setup.zsh
@@ -85,5 +105,6 @@ fi
 # Use Clang as the default C and C++ compiler
 export CXX=clang++-3.6
 export CC=clang-3.6
+
 
 [ -z "$TMUX" ] && export TERM=xterm-256color && exec tmux
