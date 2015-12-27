@@ -78,10 +78,6 @@ if [ -f /opt/ros/indigo/setup.zsh ]; then
   source /opt/ros/indigo/setup.zsh
 fi
 
-if [ -f ~/Programming/pandora_ws/devel/setup.zsh ]; then
-  source ~/Programming/pandora_ws/devel/setup.zsh
-fi
-
 # Use Clang as the default C and C++ compiler
 export CXX=clang++-3.6
 export CC=clang-3.6
