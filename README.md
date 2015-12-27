@@ -1,3 +1,3 @@
 # Dotfiles
 
-My personal dotfiles. Readme and scripts will be updated in the near future
+My personal dotfiles. README and scripts will be updated in the far future.
