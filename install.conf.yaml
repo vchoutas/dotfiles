@@ -2,16 +2,16 @@
 
 - link:
     # ~/.dotfiles: ''
-    ~/.tmux.conf: tmux.conf
-    ~/.vimrc: vimrc
+    ~/.tmux.conf: tmux/tmux.conf
+    ~/.vimrc: vim/vimrc
     ~/.zshrc: zsh/zshrc
     ~/.zsh_aliases: zsh/zsh_aliases
     ~/.zpreztorc: zsh/zpreztorc
     ~/.zprezto: zsh/prezto
     ~/.zprofile: zsh/zprofile
     ~/.zshenv: zsh/zshenv
-    ~/.bashrc: bashrc
-    ~/.bash_aliases: bash_aliases
+    ~/.bashrc: bash/bashrc
+    ~/.bash_aliases: bash/bash_aliases
     ~/.gitconfig: gitconfig
     ~/.vim: vim/
 
