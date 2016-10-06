@@ -112,7 +112,7 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/lib/nvidia-352:/usr/local/lib:
 # CuDNN Files
 export LD_LIBRARY_PATH=$HOME/cuda/lib64:$LD_LIBRARY_PATH
 # Anaconda python dist
-export PATH=/home/vchoutas/anaconda3/bin:$PATH
+# export PATH=/home/vchoutas/anaconda3/bin:$PATH
 # OpenCV 3 Libraries
 export LD_LIBRARY_PATH=$HOME/opencv3/lib:$LD_LIBRARY_PATH
 

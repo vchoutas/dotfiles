@@ -5,7 +5,6 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
 
-
 call plug#begin('~/.config/nvim/bundle')
 
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer'}

@@ -23,9 +23,9 @@
     ~/.gitconfig: gitconfig
     ~/.vim: vim/
     ~/.vimrc: vim/vimrc
-    ~/.config/nvim/:
+    ~/.config/nvim:
       create: true
-      path: ./nvim/init.vim
+      path: nvim/
       relink: true
 
 - shell:
