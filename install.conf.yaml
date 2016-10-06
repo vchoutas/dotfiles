@@ -3,6 +3,7 @@
 - link:
     # ~/.dotfiles: ''
     ~/.tmux.conf: tmux/tmux.conf
+    ~/.tmux/plugins/tpm/ : tmux/tpm
     ~/.vimrc: vim/vimrc
     ~/.zshrc: zsh/zshrc
     ~/.zsh_aliases: zsh/zsh_aliases
