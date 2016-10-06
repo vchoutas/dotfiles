@@ -23,6 +23,10 @@
     ~/.gitconfig: gitconfig
     ~/.vim: vim/
     ~/.vimrc: vim/vimrc
+    ~/.config/nvim/:
+      create: true
+      path: ./nvim/init.vim
+      relink: true
 
 - shell:
   - [git submodule update --init --recursive, "Installing submodules"]
