@@ -1,0 +1,120 @@
+#
+# Executes commands at the start of an interactive session.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+# Source Prezto.
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
+
+# Display a fancy system info.
+# Source: https://github.com/dylanaraps/neofetch
+if type neofetch &> /dev/null ; then
+  neofetch
+fi
+
+
+# Customize to your needs...
+
+# Tmux init
+[ -z "$TMUX" ] && export TERM=xterm-256color && exec tmux
+
+#############################################################
+# Use Z-Plug to manage plugins
+export ZPLUG_HOME="${ZDOTDIR:-$HOME}/.zplug"
+if [[ ! -d "${ZPLUG_HOME}" ]]; then
+  git clone https://github.com/zplug/zplug "${ZPLUG_HOME}"
+  source "${ZPLUG_HOME}/init.zsh" && zplug update --self
+fi
+
+source "${ZPLUG_HOME}/init.zsh"
+
+
+# The ZSH Plugin Manager
+# Source: https://github.com/zplug/zplug
+zplug "zplug/zplug"
+# Better Directory Listing
+# Source: https://github.com/supercrabtree/k
+zplug "supercrabtree/k"
+# Better cd
+# Source: https://github.com/peterhurford/up.zsh
+zplug "peterhurford/up.zsh"
+# Fish-like history search
+zplug "zsh-users/zsh-history-substring-search", nice:10
+# Suggests command based on command history
+zplug "zsh-users/zsh-autosuggestions", nice:11
+# Syntax highlighting for commands
+zplug "zsh-users/zsh-syntax-highlighting", nice:12
+# Shells scripts used to change the default colors of the shell
+# zplug "chriskempson/base16-shell", use:"scripts/base16-default.dark.sh"
+# Pip and Virtualenv utilities
+zplug "plugins/pip", from:oh-my-zsh
+zplug "plugins/virtualenv", from:oh-my-zsh
+
+zplug "djui/alias-tips"
+# Prompt themes
+zplug "vasilish/lagune"
+
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+
+# Then, source plugins and add commands to $PATH
+
+zplug load --verbose
+
+
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=white,bold,bg=black'
+
+# Bind keys for History Search plugin
+zmodload zsh/terminfo
+bindkey "$terminfo[kcuu1]" history-substring-search-up
+bindkey "$terminfo[kcud1]" history-substring-search-down
+
+# bind UP and DOWN arrow keys (compatibility fallback
+# for Ubuntu 12.04, Fedora 21, and MacOSX 10.9 users)
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+#############################################################
+
+
+# Add aliases
+if [ -f ~/.zsh_aliases ]; then
+  . ~/.zsh_aliases
+fi
+
+# ROS path setup
+if [ -f /opt/ros/indigo/setup.zsh ]; then
+  source /opt/ros/indigo/setup.zsh
+fi
+
+if [ -f ~/Programming/pandora_ws/devel/setup.zsh ]; then
+  source ~/Programming/pandora_ws/devel/setup.zsh
+fi
+
+# Use Clang as the default C and C++ compiler
+export CXX=clang++-3.6
+export CC=clang-3.6
+
+# Add extra folders to the PATH variable.
+export PATH="/opt/ros/indigo/bin:/usr/local/cuda-7.5/bin"\
+":/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games":$PATH
+
+# Cuda Libraries
+export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/lib/nvidia-352:/usr/local/lib:/usr/lib/:$LD_LIBRARY_PATH
+# CuDNN Files
+export LD_LIBRARY_PATH=$HOME/cuda/lib64:$LD_LIBRARY_PATH
+# Anaconda python dist
+export PATH=/home/vchoutas/anaconda3/bin:$PATH
+# OpenCV 3 Libraries
+export LD_LIBRARY_PATH=$HOME/opencv3/lib:$LD_LIBRARY_PATH
+
+# Enable Torch
+. /home/vchoutas/torch/install/bin/torch-activate

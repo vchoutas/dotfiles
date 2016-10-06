@@ -4,13 +4,16 @@
     # ~/.dotfiles: ''
     ~/.tmux.conf: tmux.conf
     ~/.vimrc: vimrc
-    ~/.zshrc: zshrc
+    ~/.zshrc: zsh/zshrc
+    ~/.zsh_aliases: zsh/zsh_aliases
+    ~/.zpreztorc: zsh/zpreztorc
+    ~/.zprezto: zsh/prezto
+    ~/.zprofile: zsh/zprofile
+    ~/.zshenv: zsh/zshenv
     ~/.bashrc: bashrc
     ~/.bash_aliases: bash_aliases
     ~/.gitconfig: gitconfig
     ~/.vim: vim/
-    ~/.zgen: zgen/
-    ~/.zsh_aliases: zsh_aliases
 
 - shell:
   - [git submodule update --init --recursive, "Installing submodules"]
