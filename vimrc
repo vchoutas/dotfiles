@@ -8,7 +8,6 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 Plugin 'Valloric/YouCompleteMe'
-Plugin 'davidhalter/jedi-vim'
 Plugin 'scrooloose/syntastic'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'nvie/vim-flake8'
@@ -16,6 +15,7 @@ Plugin 'hdima/python-syntax'
 Plugin 'bling/vim-airline'
 " Colorschemes
 Plugin 'flazz/vim-colorschemes'
+Plugin 'chriskempson/base16-vim'
 Plugin 'zenorocha/dracula-theme', {'rtp': 'vim/'}
 
 Plugin 'tpope/vim-fugitive' "https://github.com/tpope/vim-fugitive
@@ -26,10 +26,15 @@ Plugin 'scrooloose/nerdtree' "https://github.com/scrooloose/nerdtree
 
 " Git Status flags for NerdTree
 Plugin 'Xuyuanp/nerdtree-git-plugin'
+Plugin 'vim-scripts/dbext.vim'
 
+" Search Matches highlighting
+Plugin 'haya14busa/incsearch.vim'
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'mhinz/vim-startify'
 Plugin 'xolox/vim-misc'
+Plugin 'xolox/vim-lua-ftplugin'
+Plugin 'lua-support'
 Plugin 'xolox/vim-easytags'
 Plugin 'majutsushi/tagbar'
 Plugin 'rdnetto/YCM-Generator'
@@ -47,6 +52,9 @@ Plugin 'vim-scripts/a.vim'
 Plugin 'Raimondi/delimitMate'
 " Latex Support plugin for Vim
 Plugin 'LaTeX-Box-Team/LaTeX-Box'
+
+" Green Language Spelling
+Plugin 'bserem/vim-greek-spell'
 
 Plugin 'ryanoasis/vim-devicons'
 Plugin 'vim-scripts/DoxygenToolkit.vim'
@@ -117,7 +125,6 @@ set number
 set autoindent
 set smartindent
 
-set background=dark
 
 if &term =~ '256color'
   " disable Background Color Erase (BCE) so that color schemes
@@ -128,6 +135,7 @@ endif
 
 syntax on
 
+set textwidth=100
 set colorcolumn=120
 set expandtab
 set shiftwidth=2
@@ -135,22 +143,27 @@ set softtabstop=2
 set ruler
 
 set title " show file in titlebar
-" set rtp+=$HOME/.local/lib/python2.7/site-packages/powerline/bindings/vim/
+set rtp+=$HOME/.local/lib/python2.7/site-packages/powerline/bindings/vim/
 
+"
 " colorscheme impactjs
 " colorscheme billw
 " colorscheme darkBlue
+
+
+" let base16colorspace=256
+set background=dark
 colorscheme blacklight
+" colorscheme impactjs
 " colorscheme pablo
-" colorscheme neverland-darker
 
 " highlight Normal cterm=bold
 " highlight Comment term=bold cterm=bold
 " highlight Function term=bold cterm=bold
 " highlight Identifier term=bold cterm=bold ctermfg=220
 " hi Pmenu NONE
-hi Pmenu term=bold cterm=bold ctermfg=16 ctermbg=82
-hi PmenuSel term=bold cterm=bold ctermfg=16 ctermbg=8
+hi Pmenu term=bold cterm=bold ctermfg=White ctermbg=Blue
+hi PmenuSel term=bold cterm=bold ctermfg=Black
 " highlight Include term=bold cterm=bold
 " highlight Type term=bold cterm=bold
 " highlight cppSTLnamespace cterm=bold ctermfg=201
@@ -160,9 +173,9 @@ hi PmenuSel term=bold cterm=bold ctermfg=16 ctermbg=8
 " highlight String cterm=bold ctermfg=161
 
 " Highlight current line
-set cursorline
+" set cursorline
 " Set the current line to bold and black background
-hi CursorLine cterm=bold ctermbg=16
+" hi CursorLine cterm=bold ctermbg=16
 
 hi Visual term=bold cterm=bold ctermbg=8
 hi ExtraWhitespace cterm=bold term=bold ctermbg=9
@@ -206,7 +219,11 @@ set nobackup
 set nowritebackup
 set noswapfile
 
-set incsearch
+" Map Vim search commands to incsearch plugin commands
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+
 
 " Remap ctrl + arrow_key to move between windows
 nnoremap <C-Right> <c-w>l
@@ -251,7 +268,7 @@ let NERDSpaceDelims=1
 
 let g:syntastic_enable_signs = 1
 let g:syntastic_check_on_open = 0
-let g:syntastic_python_checkers = ['pep8', 'flake8']
+let g:syntastic_python_checkers = ['pylint']
 let g:syntastic_python_python_exec = '/usr/bin/python2/'
 let g:syntastic_error_symbol = "✗"
 let g:syntastic_style_error_symbol = '✗✗'
@@ -291,3 +308,18 @@ let g:XkbSwitchEnabled = 1
 
 " Disable XkbSwitch for nerdtree
 let g:XkbSwitchSkipFt = [ 'nerdtree' ]
+
+
+" Set spell check for LaTeX files
+nmap <silent> <leader>sc :set spell!<CR>
+
+autocmd BufRead,BufNewFile *.tex setlocal spell spelllang=el,en
+set complete+=kspell
+
+let g:LatexBox_quickfix=4
+let g:LatexBox_split_type="new"
+let g:LatexBox_latexmk_async=1
+
+autocmd FileType sql :DisableWhitespace
+
+let g:lua_compiler_name = '/home/vchoutas/torch/install/bin/luajit'
