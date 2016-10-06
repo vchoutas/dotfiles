@@ -1,10 +1,17 @@
+- defaults:
+    link:
+      create: true
+      relink: true
+
 - clean: ['~']
 
 - link:
-    # ~/.dotfiles: ''
+  # ~/.dotfiles: ''
     ~/.tmux.conf: tmux/tmux.conf
-    ~/.tmux/plugins/tpm/ : tmux/tpm
-    ~/.vimrc: vim/vimrc
+    ~/.tmux/plugins/tpm:
+      create: true
+      path: tmux/tpm
+      relink: true
     ~/.zshrc: zsh/zshrc
     ~/.zsh_aliases: zsh/zsh_aliases
     ~/.zpreztorc: zsh/zpreztorc
@@ -15,6 +22,7 @@
     ~/.bash_aliases: bash/bash_aliases
     ~/.gitconfig: gitconfig
     ~/.vim: vim/
+    ~/.vimrc: vim/vimrc
 
 - shell:
   - [git submodule update --init --recursive, "Installing submodules"]
