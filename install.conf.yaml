@@ -10,6 +10,7 @@
     ~/.gitconfig: gitconfig
     ~/.vim: vim/
     ~/.zgen: zgen/
+    ~/.zsh_aliases: zsh_aliases
 
 - shell:
   - [git submodule update --init --recursive, "Installing submodules"]
