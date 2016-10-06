@@ -1,3 +1,6 @@
 # Ignore all files and folders inside the bundle directory
 # They should be managed by Vundle
 vim/bundle
+
+nvim/bundle
+nvim/autoload
