@@ -48,8 +48,6 @@ zplug "zsh-users/zsh-history-substring-search", nice:10
 zplug "zsh-users/zsh-autosuggestions", nice:11
 # Syntax highlighting for commands
 zplug "zsh-users/zsh-syntax-highlighting", nice:12
-# Shells scripts used to change the default colors of the shell
-# zplug "chriskempson/base16-shell", use:"scripts/base16-default.dark.sh"
 # Pip and Virtualenv utilities
 zplug "plugins/pip", from:oh-my-zsh
 zplug "plugins/virtualenv", from:oh-my-zsh
