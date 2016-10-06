@@ -150,3 +150,4 @@ source $RBW_PATH/init.sh
 
 PS1=$RBW_THEME_ADVANCED
 
+export PIP_VIRTUALENV_BASE=/home/vchoutas/.virtualenvs
