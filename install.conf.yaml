@@ -4,9 +4,12 @@
     # ~/.dotfiles: ''
     ~/.tmux.conf: tmux.conf
     ~/.vimrc: vimrc
-    ~/.zshrc: zshrc
-    ~/.zsh_aliases: zsh_aliases
+    ~/.zshrc: zsh/zshrc
+    ~/.zsh_aliases: zsh/zsh_aliases
+    ~/.zpreztorc: zsh/zpreztorc
     ~/.zprezto: zsh/prezto
+    ~/.zprofile: zsh/zprofile
+    ~/.zshenv: zsh/zshenv
     ~/.bashrc: bashrc
     ~/.bash_aliases: bash_aliases
     ~/.gitconfig: gitconfig
