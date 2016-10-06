@@ -1,0 +1,2 @@
+alias vim="vim --servername vim"
+alias update_torch="$HOME/torch/update.sh"
