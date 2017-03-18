@@ -8,21 +8,18 @@ endif
 call plug#begin('~/.config/nvim/bundle')
 
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer'}
-" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins', 'for': ['lua']}
-" Plug 'Shougo/echodoc'
-
-Plug 'rdnetto/YCM-Generator'
 
 Plug 'scrooloose/syntastic'
 Plug 'scrooloose/nerdcommenter'
 Plug 'nvie/vim-flake8'
 " Plug 'hdima/python-syntax'
-Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 " Colorschemes
 Plug 'flazz/vim-colorschemes'
 Plug 'chriskempson/base16-vim'
 Plug 'morhetz/gruvbox'
-Plug 'zenorocha/dracula-theme', {'rtp': 'vim/'}
+Plug 'edkolev/tmuxline.vim'
 
 " Tag-related Plugins
 Plug 'xolox/vim-easytags'
@@ -47,9 +44,7 @@ Plug 'haya14busa/incsearch.vim'
 Plug 'mhinz/vim-startify'
 Plug 'xolox/vim-misc'
 
-" Lua support plugins
-" Plug 'xolox/vim-lua-ftplugin'
-" Plug 'lua-support'
+Plug 'zenbro/mirror.vim'
 
 " Adapts gui colorschemes to terminal
 " Plug 'KevinGoodsell/vim-csexact'
@@ -67,7 +62,7 @@ Plug 'Raimondi/delimitMate'
 
 "## LaTeX Plugin Support ##"
 " Latex Support plugin for Vim
-Plug 'LaTeX-Box-Team/LaTeX-Box'
+Plug 'lervag/vimtex'
 
 " Green Language Spelling
 Plug 'bserem/vim-greek-spell', {'for': 'tex'}
@@ -79,6 +74,9 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'vim-scripts/DoxygenToolkit.vim'
 
 Plug 'JuliaLang/julia-vim'
+
+" Markdown preview
+Plug 'JamshedVesuna/vim-markdown-preview'
 
 call plug#end()
 
@@ -131,9 +129,6 @@ else
   set clipboard+=unnamed
 endif
 
-let g:python2_host_prog = '/usr/local/bin/python'
-let g:python3_host_prog = '/usr/local/bin/python3'
-
 " Displays line numbers
 set number
 set lazyredraw
@@ -171,7 +166,7 @@ colorscheme gruvbox
 " highlight Function term=bold cterm=bold
 " highlight Identifier term=bold cterm=bold ctermfg=220
 " hi Pmenu NONE
-hi Pmenu term=bold cterm=bold ctermfg=White ctermbg=Blue
+" hi Pmenu term=bold cterm=bold ctermfg=White ctermbg=Blue
 hi PmenuSel term=bold cterm=bold ctermfg=Black
 " highlight Include term=bold cterm=bold
 " highlight Type term=bold cterm=bold
@@ -204,9 +199,13 @@ let g:python_no_builtin_highlight = 1
 "Highlight Class Scope
 let g:cpp_class_scope_highlight = 1
 " Set the airline plugin theme
-let g:airline_theme = 'airlineish'
+" let g:airline_theme = 'airlineish'
+let g:airline_theme = 'murmur'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tagbar#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+let airline#extensions#tabline#show_buffers = 0
+
 let g:airline#extensions#syntastic#enabled = 1
 
 
@@ -229,11 +228,12 @@ set nowritebackup
 set noswapfile
 
 " Map Vim search commands to incsearch plugin commands
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
+" map /  <Plug>(incsearch-forward)
+" map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
+let g:incsearch#auto_nohlsearch = 1
 " Press Space to turn off highlighting and clear any message already displayed.
-:nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
+nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
 
 " Use Escape key to exit terminal mode
 tnoremap <Esc> <C-\><C-n>
@@ -277,6 +277,7 @@ autocmd BufRead,BufNewFile *.cuh set filetype=cpp
       " \ | endif
 
 
+
 " YouCompleteMe Options
 let g:ycm_key_list_select_completion = ['<Down>']
 let g:ycm_key_list_previous_completion = ['<Up>']
@@ -289,8 +290,11 @@ let g:ycm_complete_in_strings = 1
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_show_diagnostics_ui = 0
+let g:ycm_semantic_triggers =  {
+  \   'c' : ['->', '.'],
+  \   'cpp,objcpp' : ['->', '.', '::'],
+  \ }
 
-" let g:lua_compiler_name = '/home/vchoutas/torch/install/bin/luajit'
 
 let g:jedi#auto_initialization = 0
 let g:jedi#completions_enabled = 1
@@ -305,8 +309,9 @@ let NERDSpaceDelims=1
 let g:syntastic_enable_signs = 1
 let g:syntastic_check_on_open = 0
 let g:syntastic_python_checkers = ['pylint']
-let g:syntastic_lua_checkers = ["luac", "luacheck"]
-let g:syntastic_lua_luacheck_args = "--no-unused-args"
+
+let vim_markdown_preview_github=1
+
 
 let g:syntastic_python_python_exec = '/usr/bin/python2/'
 let g:syntastic_error_symbol = "✗"
@@ -358,9 +363,5 @@ nmap <silent> <leader>sc :set spell!<CR>
 
 " autocmd BufRead,BufNewFile *.tex setlocal spell spelllang=el,en
 " set complete+=kspell
-
-let g:LatexBox_quickfix=4
-let g:LatexBox_split_type="new"
-let g:LatexBox_latexmk_async=1
 
 let g:tex_flavor='latex'
