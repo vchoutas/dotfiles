@@ -35,20 +35,19 @@ zstyle ':prezto:load' pmodule \
   'git' \
   'archive' \
   'python' \
-
 #
 # Autosuggestions
 #
 
 # Set the query found color.
-zstyle ':prezto:module:autosuggestions:color' found 'green'
+# zstyle ':prezto:module:autosuggestions:color' found 'green'
 
 #
 # Editor
 #
 
 # Set the key mapping style to 'emacs' or 'vi'.
-zstyle ':prezto:module:editor' key-bindings 'vi'
+# zstyle ':prezto:module:editor' key-bindings 'vi'
 
 # Auto convert .... to ../..
 zstyle ':prezto:module:editor' dot-expansion 'yes'
@@ -95,7 +94,7 @@ zstyle ':prezto:module:history-substring-search:color' found 'fg=green,bold'
 # Set the prompt theme to load.
 # Setting it to 'random' loads a random theme.
 # Auto set to 'off' on dumb terminals.
-zstyle ':prezto:module:prompt' theme 'sorin'
+zstyle ':prezto:module:prompt' theme 'off'
 
 #
 # Ruby

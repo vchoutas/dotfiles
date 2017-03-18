@@ -19,9 +19,6 @@ fi
 
 # Customize to your needs...
 
-# Tmux init
-[ -z "$TMUX" ] && export TERM=xterm-256color && exec tmux
-
 #############################################################
 # Use Z-Plug to manage plugins
 export ZPLUG_HOME="${ZDOTDIR:-$HOME}/.zplug"
@@ -31,7 +28,6 @@ if [[ ! -d "${ZPLUG_HOME}" ]]; then
 fi
 
 source "${ZPLUG_HOME}/init.zsh"
-
 
 # The ZSH Plugin Manager
 # Source: https://github.com/zplug/zplug
@@ -43,18 +39,17 @@ zplug "supercrabtree/k"
 # Source: https://github.com/peterhurford/up.zsh
 zplug "peterhurford/up.zsh"
 # Fish-like history search
-zplug "zsh-users/zsh-history-substring-search", nice:10
+zplug "zsh-users/zsh-history-substring-search", defer:3
 # Suggests command based on command history
-zplug "zsh-users/zsh-autosuggestions", nice:11
+zplug "zsh-users/zsh-autosuggestions", defer:3
 # Syntax highlighting for commands
-zplug "zsh-users/zsh-syntax-highlighting", nice:12
+zplug "zsh-users/zsh-syntax-highlighting", defer:3
 # Pip and Virtualenv utilities
 zplug "plugins/pip", from:oh-my-zsh
 zplug "plugins/virtualenv", from:oh-my-zsh
-
 zplug "djui/alias-tips"
 # Prompt themes
-zplug "vasilish/lagune"
+zplug "vasilish/lagune", as:theme
 
 # Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
@@ -104,6 +99,7 @@ export CC=clang-3.6
 # Add extra folders to the PATH variable.
 export PATH="/opt/ros/indigo/bin:/usr/local/cuda-7.5/bin"\
 ":/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games":$PATH
+export PATH=$HOME/.local/bin:$PATH
 
 # Cuda Libraries
 export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/lib/nvidia-352:/usr/local/lib:/usr/lib/:$LD_LIBRARY_PATH
@@ -113,6 +109,18 @@ export LD_LIBRARY_PATH=$HOME/cuda/lib64:$LD_LIBRARY_PATH
 # export PATH=/home/vchoutas/anaconda3/bin:$PATH
 # OpenCV 3 Libraries
 export LD_LIBRARY_PATH=$HOME/opencv3/lib:$LD_LIBRARY_PATH
+# NNPACK
+export LD_LIBRARY_PATH=$HOME/NNPACK/lib/:$LD_LIBRARY_PATH
+
+export LD_LIBRARY_PATH=/opt/intel/mkl/lib/intel64:/opt/intel/lib/intel64:$LD_LIBRARY_PATH
 
 # Enable Torch
 . /home/vchoutas/torch/install/bin/torch-activate
+
+# Tmux init
+[ -z "$TMUX" ] && export TERM=xterm-256color && exec tmux
+
+
+if [[ -a $HOME/torch/install/bin/torch-activate ]]; then
+  . $HOME/torch/install/bin/torch-activate
+fi
