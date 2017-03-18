@@ -114,12 +114,8 @@ export LD_LIBRARY_PATH=$HOME/NNPACK/lib/:$LD_LIBRARY_PATH
 
 export LD_LIBRARY_PATH=/opt/intel/mkl/lib/intel64:/opt/intel/lib/intel64:$LD_LIBRARY_PATH
 
-# Enable Torch
-. /home/vchoutas/torch/install/bin/torch-activate
-
 # Tmux init
 [ -z "$TMUX" ] && export TERM=xterm-256color && exec tmux
-
 
 if [[ -a $HOME/torch/install/bin/torch-activate ]]; then
   . $HOME/torch/install/bin/torch-activate
