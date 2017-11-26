@@ -3,5 +3,6 @@
 	email = vasilis4ch@gmail.com
 [alias]
 	tree = log --graph --color
+	unstage = reset HEAD --
 [core]
-	editor = vim
+	editor = nvim
