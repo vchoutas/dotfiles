@@ -86,3 +86,5 @@ export PROJECT_HOME=$HOME/Devel
 if [[ -a /usr/local/bin/virtualenvwrapper.sh ]]; then
   source /usr/local/bin/virtualenvwrapper.sh
 fi
+
+export PATH="$HOME/.cargo/bin:$PATH"

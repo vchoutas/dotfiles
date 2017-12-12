@@ -1,3 +1,6 @@
+# Tmux init
+# export TERM=screen-256color
+# [ -z "$TMUX" ] && exec tmux
 #
 # Executes commands at the start of an interactive session.
 #
@@ -10,12 +13,7 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-# Display a fancy system info.
-# Source: https://github.com/dylanaraps/neofetch
-if type neofetch &> /dev/null ; then
-  neofetch
-fi
-
+autoload colors && colors
 
 # Customize to your needs...
 
@@ -31,7 +29,7 @@ source "${ZPLUG_HOME}/init.zsh"
 
 # The ZSH Plugin Manager
 # Source: https://github.com/zplug/zplug
-zplug "zplug/zplug"
+zplug "zplug/zplug", hook-build:'zplug --self-manage'
 # Better Directory Listing
 # Source: https://github.com/supercrabtree/k
 zplug "supercrabtree/k"
@@ -49,7 +47,10 @@ zplug "plugins/pip", from:oh-my-zsh
 zplug "plugins/virtualenv", from:oh-my-zsh
 zplug "djui/alias-tips"
 # Prompt themes
-zplug "vasilish/lagune", as:theme
+# zplug "vasilish/lagune", as:theme
+# zplug "themes/agnoster", as:theme, from:oh-my-zsh
+zplug "mafredri/zsh-async", from:github
+zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
 
 # Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
@@ -61,10 +62,7 @@ fi
 
 # Then, source plugins and add commands to $PATH
 
-zplug load --verbose
-
-
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=white,bold,bg=black'
+zplug load
 
 # Bind keys for History Search plugin
 zmodload zsh/terminfo
@@ -88,35 +86,59 @@ if [ -f /opt/ros/indigo/setup.zsh ]; then
   source /opt/ros/indigo/setup.zsh
 fi
 
-if [ -f ~/Programming/pandora_ws/devel/setup.zsh ]; then
-  source ~/Programming/pandora_ws/devel/setup.zsh
-fi
-
-# Use Clang as the default C and C++ compiler
-export CXX=clang++-3.6
-export CC=clang-3.6
-
 # Add extra folders to the PATH variable.
-export PATH="/opt/ros/indigo/bin:/usr/local/cuda-7.5/bin"\
-":/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games":$PATH
+export PATH="/opt/ros/indigo/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games":$PATH
 export PATH=$HOME/.local/bin:$PATH
-
 # Cuda Libraries
-export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/lib/nvidia-352:/usr/local/lib:/usr/lib/:$LD_LIBRARY_PATH
+export CUDA_HOME="/opt/cuda"
+export PATH="$CUDA_HOME/bin":$PATH
+export LD_LIBRARY_PATH="/usr/local/lib:/usr/lib/":$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$CUDA_HOME/lib64":$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$CUDA_HOME/extras/CUPTI/lib64":$LD_LIBRARY_PATH
 # CuDNN Files
-export LD_LIBRARY_PATH=$HOME/cuda/lib64:$LD_LIBRARY_PATH
-# Anaconda python dist
-# export PATH=/home/vchoutas/anaconda3/bin:$PATH
-# OpenCV 3 Libraries
-export LD_LIBRARY_PATH=$HOME/opencv3/lib:$LD_LIBRARY_PATH
+export CUDNN_HOME="/opt/cudnn"
+export LD_LIBRARY_PATH="$CUDNN_HOME/lib64":$LD_LIBRARY_PATH
 # NNPACK
 export LD_LIBRARY_PATH=$HOME/NNPACK/lib/:$LD_LIBRARY_PATH
 
-export LD_LIBRARY_PATH=/opt/intel/mkl/lib/intel64:/opt/intel/lib/intel64:$LD_LIBRARY_PATH
+export INTEL_HOME="/opt/intel"
+export MKL_HOME="$INTEL_HOME/mkl"
+export LD_LIBRARY_PATH="$MKL_HOME/lib/intel64":$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$INTEL_HOME/lib/intel64":$LD_LIBRARY_PATH
+# CMAKE Path for Intel MKL
+export CMAKE_INCLUDE_PATH=$CMAKE_INCLUDE_PATH:"$MKL_HOME/include"
+export CMAKE_LIBRARY_PATH=$CMAKE_LIBRARY_PATH:"$MKL_HOME/lib/intel64"
 
-# Tmux init
-[ -z "$TMUX" ] && export TERM=xterm-256color && exec tmux
 
 if [[ -a $HOME/torch/install/bin/torch-activate ]]; then
   . $HOME/torch/install/bin/torch-activate
+fi
+
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=white,bold,bg=black'
+
+ZSH_HIGHLIGHT_STYLES[globbing]='fg=yellow,bold'
+ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=white,bold,bg=red')
+
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.zsh/cache
+
+export TRASH="$HOME/.local/share/Trash"
+export XDG_RUNTIME_DIR="$HOME/run"
+export XDG_DATA_HOME=${XDG_DATA_HOME:="$HOME/.local/share"}
+
+# Rust configuration
+export RUSTUP_HOME="$HOME/rust"
+export CARGO_HOME="$HOME/rust"
+
+# fzf options
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_TMUX=1
+# export FZF_DEFAULT_OPTS='--height 40% --border'
+export FZF_DEFAULT_COMMAND='ag --ignore .git -g ""'
+
+# Using highlight (http://www.andre-simon.de/doku/highlight/en/highlight.html)
+export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
+
+if [ -f ~/.fzf_commands ]; then
+    source ~/.fzf_commands
 fi
