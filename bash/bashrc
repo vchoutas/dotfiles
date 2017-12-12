@@ -121,33 +121,15 @@ function proml {
 
   PS1="$LIGHT_YELLOW\u$LIGHT_GREEN@$LIGHT_RED\h$LIGHT_YELLOW:$LIGHT_GRAY[\w] $LIGHT_RED\$(__git_ps1 \"(%s)\")$DEFAULT$LIGHT_YELLOW\$\n$LIGHT_GRAY>>> $DEFAULT"
 }
-# proml
+proml
 
-
-export CXX=clang++-3.6
-export CC=clang-3.6
 
 export PATH=/usr/bin:$PATH
-
-export PATH=/usr/local/cuda-7.0/bin:$PATH
-export LD_LIBRARY_PATH=/usr/local/cuda-7.0/lib64:/usr/lib/nvidia-346:$LD_LIBRARY_PATH
-
-setxkbmap -model pc105 -layout us,gr -option grp:alt_shift_toggle
-if [ -f /opt/ros/indigo/setup.bash ]; then
-  source /opt/ros/indigo/setup.bash
-fi
-
-if [ -f /opt/ros/jade/setup.bash ]; then
-  source /opt/ros/jade/setup.bash
-fi
-
-if [ -f ~/Programming/pandora_ws/devel/setup.bash ]; then
-  source ~/Programming/pandora_ws/devel/setup.bash
-fi
-
-RBW_PATH=$HOME/.rainbow-bash
-source $RBW_PATH/init.sh
-
-PS1=$RBW_THEME_ADVANCED
+export PATH="$HOME/.local/bin":$PATH
 
 export PIP_VIRTUALENV_BASE=/home/vchoutas/.virtualenvs
+
+export PATH=/opt/intel
+
+export LD_LIBRARY_PATH=/opt/intel/mkl/lib/intel64:/opt/intel/lib/intel64:$LD_LIBRARY_PATH
+
