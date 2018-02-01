@@ -7,86 +7,73 @@ endif
 
 call plug#begin('~/.config/nvim/bundle')
 
+" Auto-Completion
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer'}
-
-Plug 'scrooloose/syntastic'
-Plug 'scrooloose/nerdcommenter'
+" Syntax checking
+Plug 'neomake/neomake'
 Plug 'nvie/vim-flake8'
-" Plug 'hdima/python-syntax'
+" Track the engine.
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+" Tag-related Plugins
+Plug 'xolox/vim-easytags'
+Plug 'majutsushi/tagbar'
+" Comment support
+Plug 'scrooloose/nerdcommenter'
+" Julia support
+Plug 'JuliaEditorSupport/julia-vim'
+" Status line enhancement
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 " Colorschemes
 Plug 'flazz/vim-colorschemes'
-Plug 'chriskempson/base16-vim'
 Plug 'morhetz/gruvbox'
 Plug 'edkolev/tmuxline.vim'
-
-" Tag-related Plugins
-Plug 'xolox/vim-easytags'
-Plug 'majutsushi/tagbar'
-
-Plug 'octol/vim-cpp-enhanced-highlight', {'for': ['c', 'cpp']}
+" Enable f,F,t,T to wrap over lines
+Plug 'dahu/vim-fanfingtastic'
 " Motion Plugins
 Plug 'easymotion/vim-easymotion'
-
+" Vim persistent editing
+Plug 'kopischke/vim-stay' " https://github.com/kopischke/vim-stay
 Plug 'tpope/vim-fugitive' "https://github.com/tpope/vim-fugitive
 Plug 'tpope/vim-surround'
 Plug 'taketwo/vim-ros' "https://github.com/taketwo/vim-ros
-Plug 'Yggdroot/indentLine' "https://github.com/Yggdroot/indentLine
+Plug 'thaerkh/vim-indentguides'  " https://github.com/thaerkh/vim-indentguides
+" Navigation helper
 Plug 'scrooloose/nerdtree' "https://github.com/scrooloose/nerdtree
-
 " Git Status flags for NerdTree
 Plug 'Xuyuanp/nerdtree-git-plugin'
-
 " Search Matches highlighting
 Plug 'haya14busa/incsearch.vim'
-
 Plug 'mhinz/vim-startify'
 Plug 'xolox/vim-misc'
-
+" Helper for remote editing
 Plug 'zenbro/mirror.vim'
-
-" Adapts gui colorschemes to terminal
-" Plug 'KevinGoodsell/vim-csexact'
-" Airline bar theme
-Plug 'paranoida/vim-airlineish'
 " View git diff on vim
 Plug 'airblade/vim-gitgutter'
 " Track the engine.
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'ntpeters/vim-better-whitespace'
-" Easy switching between header and source file
-Plug 'vim-scripts/a.vim'
 Plug 'Raimondi/delimitMate'
-
 
 "## LaTeX Plugin Support ##"
 " Latex Support plugin for Vim
 Plug 'lervag/vimtex'
 
-" Green Language Spelling
-Plug 'bserem/vim-greek-spell', {'for': 'tex'}
-
-" Autoswitch on ESC back to English KeyMap in order to insert Commands
-Plug 'lyokha/vim-xkbswitch', {'for': 'tex'}
-
 Plug 'ryanoasis/vim-devicons'
-Plug 'vim-scripts/DoxygenToolkit.vim'
-
-Plug 'JuliaLang/julia-vim'
-
 " Markdown preview
 Plug 'JamshedVesuna/vim-markdown-preview'
 
 call plug#end()
 
-" When started as "evim", evim.vim will already have done these settings.
-if v:progname =~? "evim"
-  finish
-endif
+" Enable indent loading for specific file types
+filetype plugin indent on
 
 if !has('nvim')
   set encoding=utf-8
+endif
+
+if has('nvim')
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 endif
 
 set backspace=indent,eol,start
@@ -96,25 +83,10 @@ if has('mouse')
   set mouse=a
 endif
 
-" Convenient command to see the difference between the current buffer and the
-" file it was loaded from, thus the changes you made.
-" Only define it when not defined already.
-if !exists(":DiffOrig")
-  command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
-		  \ | wincmd p | diffthis
-endif
-
-if has('langmap') && exists('+langnoremap')
-  " Prevent that the langmap option applies to characters that result from a
-  " mapping.  If unset (default), this may break plugins (but it's backward
-  " compatible).
-  set langnoremap
-endif
-
-
+" Complete till longest common string and list all matches
 set wildmode=longest,list
 
-
+" Open NERDTree when staring neovim
 autocmd VimEnter *
                 \   if !argc()
                 \ |   Startify
@@ -133,81 +105,110 @@ endif
 set number
 set lazyredraw
 
+" Do not save backup files
+set nobackup
+set nowritebackup
+set noswapfile
+
 " Copy Indent from previous line
 set autoindent
-set smartindent
+filetype indent on
 
-if &term =~ '256color'
-  " disable Background Color Erase (BCE) so that color schemes
-  " render properly when inside 256-color tmux and GNU screen.
-  " see also http://snk.tuxfamily.org/log/vim-256color-bce.html
-  set t_ut=
-endif
-
+" Enable syntax highlighting
 syntax on
 
-set textwidth=100
-set colorcolumn=120
+" Width of line
+set textwidth=80
+" Use the appropriate number of spaces to insert a <Tab>
 set expandtab
-set shiftwidth=2
-set softtabstop=2
+" Use 4 spaces when pressing <<, >>, ==
+set shiftwidth=4
+set tabstop=8
+" Set the number of spaces for tabs
+set softtabstop=4
+" Enable modelines for files
+set modeline
+" Show the line and column number of the cursor position, separated by a
+" comma.
 set ruler
 
-set title " show file in titlebar
+set conceallevel=0
 
-" let base16colorspace=256
+" Custom colors for highlighting the position of the error/warning
+augroup my_neomake_highlights
+    au!
+    autocmd ColorScheme *
+                \ hi link NeomakeError GruvboxRed |
+                \ hi link NeomakeWarning GruvboxOrangeBold |
+                \ hi link NeomakeInfo GruvboxGreen |
+augroup END
+
 set background=dark
-" colorscheme blacklight
+" Set up the color scheme
 colorscheme gruvbox
-" colorscheme pablo
 
-" highlight Normal cterm=bold
-" highlight Comment term=bold cterm=bold
-" highlight Function term=bold cterm=bold
-" highlight Identifier term=bold cterm=bold ctermfg=220
-" hi Pmenu NONE
-" hi Pmenu term=bold cterm=bold ctermfg=White ctermbg=Blue
-hi PmenuSel term=bold cterm=bold ctermfg=Black
-" highlight Include term=bold cterm=bold
-" highlight Type term=bold cterm=bold
-" highlight cppSTLnamespace cterm=bold ctermfg=201
-" highlight Statement cterm=bold ctermfg=163
-" highlight cppSTLconstant cterm=bold ctermfg=63
-" highlight cppSTLtype cterm=bold ctermfg=27
-" highlight String cterm=bold ctermfg=161
+function! s:HLGroup(group, fg, bg)
+    let fg = a:fg
+    let bg = a:bg
+    let histring = [ 'hi', a:group,
+                \  'ctermfg=' . fg,
+                \ 'ctermbg=' . bg,
+                \ ]
+  execute join(histring, ' ')
+endfunction
+
+let s:ColumnColor = neomake#utils#GetHighlight('SignColumn', 'bg')
+let s:GruvboxRed = neomake#utils#GetHighlight('GruvboxRed', 'fg')
+let s:GruvboxOrange = neomake#utils#GetHighlight('GruvboxOrange', 'fg')
+call s:HLGroup('NeomakeErrorSign', s:GruvboxRed, s:ColumnColor)
+call s:HLGroup('NeomakeWarningSign', s:GruvboxOrange, s:ColumnColor)
 
 " Highlight current line
 set cursorline
 " Set the current line to bold and black background
 hi CursorLine cterm=bold ctermbg=0
 
-hi Visual term=bold cterm=bold ctermbg=8
+" Highlight extra whitespaces with red
 hi ExtraWhitespace cterm=bold term=bold ctermbg=9
 hi SpellBad term=bold cterm=bold ctermbg=9
 hi SpellCap term=bold cterm=bold ctermbg=28
 
+" Enable color column only in python files
+autocmd BufNewFile,BufRead *.py setlocal colorcolumn=80
+
+" PEP8 indentation
+au BufNewFile,BufRead *.py
+    \ set tabstop=4 |
+    \ set softtabstop=4 |
+    \ set shiftwidth=4 |
+    \ set textwidth=79 |
+    \ set expandtab |
+    \ set autoindent |
+    \ set fileformat=unix
+
+" When using :split put the window below the current one
+set splitbelow
+" When using :vsplit put the window to the right of the current one
+set splitright
+" show file in titlebar
+set title
+
 let g:load_doxygen_syntax=1
 let loaded_matchparen = 1
 
-let g:indentLine_char = '|'
-let g:indentLine_color_term = 239
+let g:indentguides_ignorelist = ['text']
+let g:indentguides_tabchar = '|'
 
 " Delete all trailing whitespaces on save
 let g:strip_whitespace_on_save=1
 
-let g:python_no_builtin_highlight = 1
-"Highlight Class Scope
-let g:cpp_class_scope_highlight = 1
 " Set the airline plugin theme
-" let g:airline_theme = 'airlineish'
 let g:airline_theme = 'murmur'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tagbar#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 let airline#extensions#tabline#show_buffers = 0
-
-let g:airline#extensions#syntastic#enabled = 1
-
+let g:airline#extensions#ycm#enabled = 0
 
 let g:airline_detect_modified=1
 let g:airline_detect_paste=1
@@ -223,31 +224,66 @@ set noshowmode
 set laststatus=2
 set showcmd
 
-set nobackup
-set nowritebackup
-set noswapfile
+""" Custom Key Bindings
+" Press two semicolons to escape insert mode
+imap ;; <Esc>
+
+let mapleader = "<Space>"
+let maplocalleader = '<Space>'
+map <Space> <leader>
+map <Space><Space> <leader><leader>
+
+" Move the current line one line down in Normal mode
+nnoremap <A-j> :m .+1<CR>==
+" Move the current line one line up in Normal mode
+nnoremap <A-k> :m .-2<CR>==
+" Move the current line one line down in Insert mode
+inoremap <A-j> <Esc>:m .+1<CR>==gi
+" Move the current line one line up in Insert mode
+inoremap <A-k> <Esc>:m .-2<CR>==gi
+" Move the selected lines one line down in visual mode
+vnoremap <A-j> :m '>+1<CR>gv=gv
+" Move the selected lines one line up in visual mode
+vnoremap <A-k> :m '<-2<CR>gv=gv
 
 " Map Vim search commands to incsearch plugin commands
-" map /  <Plug>(incsearch-forward)
-" map ?  <Plug>(incsearch-backward)
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
 let g:incsearch#auto_nohlsearch = 1
-" Press Space to turn off highlighting and clear any message already displayed.
-nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
+" Press Enter to turn off highlighting and clear any message already displayed.
+nnoremap <silent> <CR> :nohlsearch<Bar>:echo<CR>
 
 " Use Escape key to exit terminal mode
 tnoremap <Esc> <C-\><C-n>
 
 " Remap ctrl + arrow_key to move between windows
-nnoremap <C-Right> <c-w>l
-nnoremap <C-Down> <c-w>j
-nnoremap <C-Left> <c-w>h
-nnoremap <C-Up> <c-w>k
-" Ctrl-y to copy in + buffer from visual mode
-" vmap <C-y> "+y
+nnoremap <C-l> <c-w>l
+nnoremap <C-j> <c-w>j
+nnoremap <C-h> <c-w>h
+nnoremap <C-k> <c-w>k
 
-"Ctrl-p to paste from the + register in cmd mode
-" map <C-p> "+p
+" Disable arrow keys
+noremap <Up> <NOP>
+noremap <C-Up> <NOP>
+noremap <Down> <NOP>
+noremap <C-Down> <NOP>
+noremap <Left> <NOP>
+noremap <C-Left> <NOP>
+noremap <Right> <NOP>
+noremap <C-Right> <NOP>
+
+" Use tab to go to next buffer in normal mode
+nnoremap <Tab> :bnext<CR>
+nnoremap <S-Tab> :bprevious<CR>
+
+map <Leader><Leader>l <Plug>(easymotion-lineforward)
+map <Leader><Leader>j <Plug>(easymotion-j)
+map <Leader><Leader>k <Plug>(easymotion-k)
+map <Leader><Leader>h <Plug>(easymotion-linebackward)
+
+" keep cursor column when using JK motion
+let g:EasyMotion_startofline = 0
 
 " Workaround to enable clipboard yank and paste
 function! ClipboardYank()
@@ -264,25 +300,28 @@ nnoremap <silent> p :call ClipboardPaste()<cr>p
 onoremap <silent> y y:call ClipboardYank()<cr>
 onoremap <silent> d d:call ClipboardYank()<cr>
 
-" Cuda filetype
-" au BufNewFile,BufRead *.cu set filetype=cuda
-autocmd BufRead,BufNewFile *.cu set filetype=cpp
-autocmd BufRead,BufNewFile *.cuh set filetype=cpp
-" au BufNewFile,BufRead *.cuh set filetype=cuda.cpp
-" au BufNewFile,BufRead *.cu set ft=cuda.cpp
-" au Syntax cuda
-      " \ if (exists('b:load_doxygen_syntax') && b:load_doxygen_syntax)
-      " \       || (exists('g:load_doxygen_syntax') && g:load_doxygen_syntax)
-      " \   | runtime! syntax/doxygen.vim
-      " \ | endif
+set wildignore+=.hg,.git,.svn                    " Version control
+set wildignore+=*.aux,*.out,*.toc                " LaTeX intermediate files
+set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg   " binary images
+set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest " compiled object files
+set wildignore+=*.spl                            " compiled spelling word lists
+set wildignore+=*.sw?                            " Vim swap files
+set wildignore+=*.DS_Store                       " OSX
+set wildignore+=*.luac                           " Lua byte code
+set wildignore+=*.pyc                            " Python byte code
+set wildignore+=*.orig                           " Merge resolution files
 
-
+" Julia Configuration
+let g:default_julia_version = '0.6'
+" Necessary because sometime vim thinks that *.jl files are Lisp
+autocmd BufRead,BufNewFile *.jl :set filetype=julia
+autocmd BufRead,BufNewFile *.jl :set syntax=julia
 
 " YouCompleteMe Options
-let g:ycm_key_list_select_completion = ['<Down>']
-let g:ycm_key_list_previous_completion = ['<Up>']
+let g:ycm_key_list_select_completion = ['<TAB>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-o>', '<Up>']
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
-" let g:ycm_path_to_python_interpreter = '/usr/bin/python2'
+let g:ycm_path_to_python_interpreter = '/usr/bin/python3'
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_server_keep_logfile = 0
 let g:ycm_complete_in_comments = 1
@@ -294,9 +333,9 @@ let g:ycm_semantic_triggers =  {
   \   'c' : ['->', '.'],
   \   'cpp,objcpp' : ['->', '.', '::'],
   \ }
+nnoremap <leader>gt :YcmCompleter GoToDefinition<CR>
 
-
-let g:jedi#auto_initialization = 0
+let g:jedi#auto_initialization = 1
 let g:jedi#completions_enabled = 1
 
 " Place tagbar on top
@@ -304,21 +343,48 @@ let g:tagbar_left = 1
 let g:tagbar_vertical = 10
 
 let NERDSpaceDelims=1
-
-" Syntastic Options
-let g:syntastic_enable_signs = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_python_checkers = ['pylint']
-
 let vim_markdown_preview_github=1
 
+" NeoMake Options
+" flake8: Check python source for errors
+" pep8: python style checker
+" vulture: finds unused code segments
+let g:neomake_python_enabled_makers = ['flake8', 'pep8', 'vulture']
+" let g:neomake_python_flake8_maker = { 'args': ['--ignore=E115,E266,E501'], }
+let g:neomake_python_pep8_maker = { 'args': ['--max-line-length=120', '--ignore=E115,E266'], }
 
-let g:syntastic_python_python_exec = '/usr/bin/python2/'
-let g:syntastic_error_symbol = "✗"
-let g:syntastic_warning_symbol = '☢'
-let g:syntastic_style_error_symbol = '✗✗'
+" Define new signs for the following messages
+" hi NeomakeErrorMsg ctermfg=GruvboxRed
+let g:neomake_error_sign = {
+            \ 'text': '✗',
+            \ 'texthl': 'NeomakeErrorSign',
+            \ }
+let g:neomake_warning_sign = {
+            \ 'text': '☢',
+            \ 'texthl': 'NeomakeWarningSign',
+            \ }
 
+" run neomake on the current file on every write:
+autocmd! BufWritePost * Neomake
+
+" Automatically change to CWD when opening startify
 let g:startify_change_to_dir = 1
+let g:startify_bookmarks = ['~/workspace', '~/.zshrc', '~/.config/nvim/init.vim',
+            \ '~/.tmux.conf']
+" The number of MRU files to be displayed
+let g:startify_files_number = 5
+let g:startify_list_order = [
+            \ ['   MRU Files'],
+            \ 'files',
+            \ ['   Current working dir MRU files'],
+            \ 'dir',
+            \ ['   Bookmarks:'],
+            \ 'bookmarks',
+            \ ['   Sessions:'],
+            \ 'sessions',
+            \ ['   Commands:'],
+            \ 'commands',
+            \ ]
 
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsExpandTrigger="<c-j>"
@@ -327,6 +393,9 @@ let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 let g:Ultisnips_python_style="doxygen"
 let g:UltiSnipsListSnippets="<c-b>"
 
+let g:easytags_async=1
+
+" Open the tagbar using Ctrl-t
 nmap <C-t> :TagbarToggle<CR>
 " NERDTree
 " toggle NERDTree with Ctrl+n
@@ -335,26 +404,14 @@ map <C-n> :NERDTreeToggle<CR>
 " find the current file in NERDTree
 nmap <leader>f :NERDTreeFind<CR>
 
-
-set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ Plus\ Nerd\ File\ Types\ Mono\ Plus\ Font\ Awesome\ Plus\ Pomicons
+let NERDTreeIgnore = ['\.pyc$', '\.png$', '\.aux$', '\.lo[a-z]*$', '\.error$', '\.output$', '__pycache__']
 
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:DoxygenToolkit_authorName="Vassilis Choutas"
-" Remove TeX Preview in vim buffer
-let g:tex_conceal = ""
-
-" Greek Keyboard Support for Vim
-set langmap=ΑA,ΒB,ΨC,ΔD,ΕE,ΦF,ΓG,ΗH,ΙI,ΞJ,ΚK,ΛL,ΜM,ΝN,ΟO,ΠP,QQ,ΡR,ΣS,ΤT,ΘU,ΩV,WW,ΧX,ΥY,ΖZ,αa,βb,ψc,δd,εe,φf,γg,ηh,ιi,ξj,κk,λl,μm,νn,οo,πp,qq,ρr,σs,τt,θu,ωv,ςw,χx,υy,ζz
-
-" Enable xkb switch Plugin
-let g:XkbSwitchEnabled = 1
-
-" Disable XkbSwitch for nerdtree
-let g:XkbSwitchSkipFt = [ 'nerdtree' ]
-
 
 " Vim mapping to edit configuration file
-noremap <leader>ev :split $MYVIMRC<CR>
+noremap <leader>ev :edit $MYVIMRC<CR>
+noremap <leader>tv :tabedit $MYVIMRC<CR>
 " Vim mapping to source configuration file
 nnoremap <leader>sv :source $MYVIMRC<CR>
 
