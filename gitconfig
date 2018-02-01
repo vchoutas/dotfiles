@@ -1,8 +1,9 @@
 [user]
 	name = vasilish
-	email = vasilis4ch@gmail.com
+	email = vasilish@users.noreply.github.com
 [alias]
 	tree = log --graph --color
 	unstage = reset HEAD --
+        cached = diff --cached
 [core]
 	editor = nvim
