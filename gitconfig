@@ -1,6 +1,6 @@
 [user]
-	name = vasilish
-	email = vasilish@users.noreply.github.com
+	name = vchoutas
+	email = vchoutas@users.noreply.github.com
 [alias]
 	tree = log --graph --color
 	unstage = reset HEAD --
