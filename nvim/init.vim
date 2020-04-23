@@ -8,19 +8,43 @@ endif
 call plug#begin('~/.config/nvim/bundle')
 
 " Auto-Completion
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer'}
+" Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer'}
+" Plug 'https://github.com/Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'zchee/deoplete-jedi'
+
+Plug 'https://github.com/autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
+
+Plug 'ncm2/ncm2'
+Plug 'roxma/nvim-yarp'
+
+" enable ncm2 for all buffers
+autocmd BufEnter * call ncm2#enable_for_buffer()
+
+" IMPORTANT: :help Ncm2PopupOpen for more information
+set completeopt=noinsert,menuone,noselect
+
+" NOTE: you need to install completion sources to get completions. Check
+" our wiki page for a list of sources: https://github.com/ncm2/ncm2/wiki
+Plug 'ncm2/ncm2-bufword'
+Plug 'ncm2/ncm2-path'
+Plug 'ncm2/ncm2-jedi'
+" handle the function signatures displaying
+Plug 'Shougo/echodoc.vim'" Syntax checking
+
 " Syntax checking
 Plug 'neomake/neomake'
 Plug 'nvie/vim-flake8'
+Plug 'Vimjas/vim-python-pep8-indent'
 " Track the engine.
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-" Tag-related Plugins
-Plug 'xolox/vim-easytags'
-Plug 'majutsushi/tagbar'
 " Comment support
 Plug 'scrooloose/nerdcommenter'
-" Julia support
-Plug 'JuliaEditorSupport/julia-vim'
 " Status line enhancement
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -36,7 +60,6 @@ Plug 'easymotion/vim-easymotion'
 Plug 'kopischke/vim-stay' " https://github.com/kopischke/vim-stay
 Plug 'tpope/vim-fugitive' "https://github.com/tpope/vim-fugitive
 Plug 'tpope/vim-surround'
-Plug 'taketwo/vim-ros' "https://github.com/taketwo/vim-ros
 Plug 'thaerkh/vim-indentguides'  " https://github.com/thaerkh/vim-indentguides
 " Navigation helper
 Plug 'scrooloose/nerdtree' "https://github.com/scrooloose/nerdtree
@@ -51,7 +74,6 @@ Plug 'zenbro/mirror.vim'
 " View git diff on vim
 Plug 'airblade/vim-gitgutter'
 " Track the engine.
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'Raimondi/delimitMate'
 
@@ -193,7 +215,6 @@ set splitright
 " show file in titlebar
 set title
 
-let g:load_doxygen_syntax=1
 let loaded_matchparen = 1
 
 let g:indentguides_ignorelist = ['text']
@@ -282,6 +303,11 @@ map <Leader><Leader>j <Plug>(easymotion-j)
 map <Leader><Leader>k <Plug>(easymotion-k)
 map <Leader><Leader>h <Plug>(easymotion-linebackward)
 
+nmap <Leader>l <Plug>(easymotion-overwin-line)
+hi link EasyMotionTarget NeomakeWarning
+hi link EasyMotionTarget2First EasyMotionTarget
+hi link EasyMotionTarget2Second EasyMotionTarget
+
 " keep cursor column when using JK motion
 let g:EasyMotion_startofline = 0
 
@@ -311,36 +337,56 @@ set wildignore+=*.luac                           " Lua byte code
 set wildignore+=*.pyc                            " Python byte code
 set wildignore+=*.orig                           " Merge resolution files
 
-" Julia Configuration
-let g:default_julia_version = '0.6'
-" Necessary because sometime vim thinks that *.jl files are Lisp
-autocmd BufRead,BufNewFile *.jl :set filetype=julia
-autocmd BufRead,BufNewFile *.jl :set syntax=julia
+" let g:deoplete#enable_at_startup = 1
+" let g:deoplete#sources#jedi#show_docstring = 1
 
+let g:LanguageClient_serverCommands = {
+            \ 'cpp': ['clangd'],
+            \ 'cuda': ['clangd'],
+            \ 'python': ['pyls'],
+            \ }
+
+" let g:python_host_prog = '/usr/bin/python2'
+let g:python3_host_prog = '/usr/bin/python3'
+
+nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+" Or map each action separately
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+nnoremap <leader>lf :call LanguageClient#textDocument_formatting()<CR>
+nnoremap <leader>ll :call LanguageClient#debugInfo()<CR>
+
+let g:LanguageClient_serverStderr = '/tmp/clangd.stderr'
+" inoremap <silent><expr> <C-k> pumvisible() ?
+            \ deoplete#mappings#close_popup() : "<C-g>u<Cr>"
+
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+set cmdheight=2
+let g:echodoc#enable_at_startup = 1
+let g:echodoc#type = 'signature'
 " YouCompleteMe Options
-let g:ycm_key_list_select_completion = ['<TAB>', '<Down>']
-let g:ycm_key_list_previous_completion = ['<C-o>', '<Up>']
-let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
-let g:ycm_path_to_python_interpreter = '/usr/bin/python3'
-let g:ycm_confirm_extra_conf = 0
-let g:ycm_server_keep_logfile = 0
-let g:ycm_complete_in_comments = 1
-let g:ycm_complete_in_strings = 1
-let g:ycm_collect_identifiers_from_comments_and_strings = 1
-let g:ycm_autoclose_preview_window_after_insertion = 1
-let g:ycm_show_diagnostics_ui = 0
-let g:ycm_semantic_triggers =  {
-  \   'c' : ['->', '.'],
-  \   'cpp,objcpp' : ['->', '.', '::'],
-  \ }
-nnoremap <leader>gt :YcmCompleter GoToDefinition<CR>
+" let g:ycm_key_list_select_completion = ['<TAB>', '<Down>']
+" let g:ycm_key_list_previous_completion = ['<C-o>', '<Up>']
+" let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+" let g:ycm_path_to_python_interpreter = '/usr/bin/python3'
+" let g:ycm_server_python_interpreter = '/usr/bin/python3'
+" let g:ycm_confirm_extra_conf = 0
+" let g:ycm_server_keep_logfile = 0
+" let g:ycm_complete_in_comments = 1
+" let g:ycm_complete_in_strings = 1
+" let g:ycm_collect_identifiers_from_comments_and_strings = 1
+" let g:ycm_autoclose_preview_window_after_insertion = 1
+" let g:ycm_show_diagnostics_ui = 0
+" let g:ycm_semantic_triggers =  {
+  " \   'c' : ['->', '.'],
+  " \   'cpp,objcpp' : ['->', '.', '::'],
+  " \ }
+" nnoremap <leader>gt :YcmCompleter GoToDefinition<CR>
 
 let g:jedi#auto_initialization = 1
 let g:jedi#completions_enabled = 1
-
-" Place tagbar on top
-let g:tagbar_left = 1
-let g:tagbar_vertical = 10
 
 let NERDSpaceDelims=1
 let vim_markdown_preview_github=1
@@ -367,6 +413,34 @@ let g:neomake_warning_sign = {
 " run neomake on the current file on every write:
 autocmd! BufWritePost * Neomake
 
+let g:LanguageClient_diagnosticsDisplay = {
+    \     1: {
+    \         "name": "Error",
+    \         "texthl": "ALEError",
+    \         "signText": "✗",
+    \         "signTexthl": "NeomakeErrorSign",
+    \     },
+    \     2: {
+    \         "name": "Warning",
+    \         "texthl": "ALEWarning",
+    \         "signText": "⚠",
+    \         "signTexthl": "NeomakeWarningSign",
+    \     },
+    \     3: {
+    \         "name": "Information",
+    \         "texthl": "ALEInfo",
+    \         "signText": "ℹ",
+    \         "signTexthl": "ALEInfoSign",
+    \     },
+    \     4: {
+    \         "name": "Hint",
+    \         "texthl": "ALEInfo",
+    \         "signText": "➤",
+    \         "signTexthl": "ALEInfoSign",
+    \     },
+    \ }
+
+
 " Automatically change to CWD when opening startify
 let g:startify_change_to_dir = 1
 let g:startify_bookmarks = ['~/workspace', '~/.zshrc', '~/.config/nvim/init.vim',
@@ -387,16 +461,31 @@ let g:startify_list_order = [
             \ ]
 
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<c-j>"
-let g:UltiSnipsJumpForwardTrigger="<c-j>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-let g:Ultisnips_python_style="doxygen"
-let g:UltiSnipsListSnippets="<c-b>"
+" let g:UltiSnipsExpandTrigger="<c-j>"
+" let g:UltiSnipsJumpForwardTrigger="<c-j>"
+" let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+" let g:Ultisnips_python_style="doxygen"
+" let g:UltiSnipsListSnippets="<c-b>"
+" Enable snipMate compatibility feature.
+let g:neosnippet#enable_snipmate_compatibility = 1
 
-let g:easytags_async=1
+" Tell Neosnippet about the other snippets
+let g:neosnippet#snippets_directory='~/.config/nvim/bundle/vim-snippets/snippets'
+"" Plugin key-mappings.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <C-j>     <Plug>(neosnippet_expand_or_jump)
+smap <C-j>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-j>     <Plug>(neosnippet_expand_target)
 
-" Open the tagbar using Ctrl-t
-nmap <C-t> :TagbarToggle<CR>
+" SuperTab like snippets behavior.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+"imap <expr><TAB>
+" \ pumvisible() ? "\<C-n>" :
+" \ neosnippet#expandable_or_jumpable() ?
+" \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
 " NERDTree
 " toggle NERDTree with Ctrl+n
 map <C-n> :NERDTreeToggle<CR>
@@ -407,8 +496,6 @@ nmap <leader>f :NERDTreeFind<CR>
 let NERDTreeIgnore = ['\.pyc$', '\.png$', '\.aux$', '\.lo[a-z]*$', '\.error$', '\.output$', '__pycache__']
 
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
-let g:DoxygenToolkit_authorName="Vassilis Choutas"
-
 " Vim mapping to edit configuration file
 noremap <leader>ev :edit $MYVIMRC<CR>
 noremap <leader>tv :tabedit $MYVIMRC<CR>
@@ -417,8 +504,5 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 
 " Set spell check for LaTeX files
 nmap <silent> <leader>sc :set spell!<CR>
-
-" autocmd BufRead,BufNewFile *.tex setlocal spell spelllang=el,en
-" set complete+=kspell
-
 let g:tex_flavor='latex'
+map <leader>ll <PLUG>(vimtex-compile)
