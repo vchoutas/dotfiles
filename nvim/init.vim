@@ -16,9 +16,9 @@ Plug 'https://github.com/autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
     \ }
-
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
+Plug 'ncm2/ncm2-neosnippet'
 
 Plug 'ncm2/ncm2'
 Plug 'roxma/nvim-yarp'
@@ -347,7 +347,8 @@ let g:LanguageClient_serverCommands = {
             \ }
 
 " let g:python_host_prog = '/usr/bin/python2'
-let g:python3_host_prog = '/usr/bin/python3'
+let g:python_host_prog = '~/.virtualenvs/nvim/bin/python'
+let g:python3_host_prog = '~/.virtualenvs/nvim/bin/python'
 
 nnoremap <F5> :call LanguageClient_contextMenu()<CR>
 " Or map each action separately
@@ -359,7 +360,7 @@ nnoremap <leader>ll :call LanguageClient#debugInfo()<CR>
 
 let g:LanguageClient_serverStderr = '/tmp/clangd.stderr'
 " inoremap <silent><expr> <C-k> pumvisible() ?
-            \ deoplete#mappings#close_popup() : "<C-g>u<Cr>"
+" \ deoplete#mappings#close_popup() : "<C-g>u<Cr>"
 
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
@@ -471,6 +472,8 @@ let g:neosnippet#enable_snipmate_compatibility = 1
 
 " Tell Neosnippet about the other snippets
 let g:neosnippet#snippets_directory='~/.config/nvim/bundle/vim-snippets/snippets'
+
+inoremap <silent> <expr> <CR> ncm2_neosnippet#expand_or("\<CR>", 'n')
 "" Plugin key-mappings.
 " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
 imap <C-j>     <Plug>(neosnippet_expand_or_jump)
@@ -505,4 +508,22 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 " Set spell check for LaTeX files
 nmap <silent> <leader>sc :set spell!<CR>
 let g:tex_flavor='latex'
+let g:tex_conceal = ''
+let g:vimtex_fold_manual = 1
+let g:vimtex_latexmk_continuous = 1
 map <leader>ll <PLUG>(vimtex-compile)
+
+" NCM2
+augroup my_cm_setup
+    autocmd!
+    autocmd BufEnter * call ncm2#enable_for_buffer()
+    autocmd Filetype tex call ncm2#register_source({
+                \ 'name': 'vimtex',
+                \ 'priority': 8,
+                \ 'scope': ['tex'],
+                \ 'mark': 'tex',
+                \ 'word_pattern': '\w+',
+                \ 'complete_pattern': g:vimtex#re#ncm2,
+                \ 'on_complete': ['ncm2#on_complete#omni', 'vimtex#complete#omnifunc'],
+                \ })
+augroup END
