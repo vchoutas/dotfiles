@@ -1,0 +1,99 @@
+{
+    "editor.fontFamily": "Courier New",
+    "terminal.integrated.fontFamily": "monospace",
+    "workbench.colorTheme": "Gruvbox Dark Hard",
+    "vim.easymotion": true,
+    "vim.incsearch": true,
+    "vim.useSystemClipboard": true,
+    "vim.useCtrlKeys": true,
+    "vim.hlsearch": true,
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+                "<leader>",
+                "d"
+            ],
+            "after": [
+                "d",
+                "d"
+            ]
+        },
+        {
+            "before": [
+                "<C-w>l"
+            ],
+            "after": [
+                "<C-l>"
+            ]
+        },
+        {
+            "before": [
+                "<C-w>j"
+            ],
+            "after": [
+                "<C-j>"
+            ]
+        },
+        {
+            "before": [
+                "<C-w>k"
+            ],
+            "after": [
+                "<C-k>"
+            ]
+        },
+        {
+            "before": [
+                "<C-w>h"
+            ],
+            "after": [
+                "<C-h>"
+            ]
+        }
+    ],
+    "vim.leader": "<space>",
+    "vim.handleKeys": {
+        "<C-a>": false,
+        "<C-f>": false
+    },
+    "cmake.configureOnOpen": true,
+    "C_Cpp.default.cppStandard": "c++11",
+    "terminal.integrated.shell.linux": "/bin/zsh",
+    "liveshare.authenticationProvider": "GitHub",
+    "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 4 }",
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter-notebook"
+    },
+    "editor.trimAutoWhitespace": false,
+    "editor.formatOnSave": true,
+    "files.trimTrailingWhitespace": true,
+    "editor.fontLigatures": false,
+    "C_Cpp.updateChannel": "Insiders",
+    "[python]": {
+        "editor.rulers": [
+            80,
+            120
+        ]
+    },
+    "sync-rsync.exclude": [
+        ".git",
+        ".vscode",
+        "images",
+        "samples"
+    ],
+    "pythonIndent.trimLinesWithOnlyWhitespace": true,
+    "editor.fontSize": 12,
+    "notebook.cellToolbarLocation": {
+        "default": "right",
+        "jupyter-notebook": "left"
+    },
+    "python.formatting.autopep8Args": [
+        "--ignore",
+        "E402"
+    ],
+    "sync-rsync.autoShowOutputOnError": false,
+    "terminal.integrated.defaultProfile.linux": "zsh",
+    "sync-rsync.onSaveIndividual": true,
+    "python.analysis.autoImportCompletions": false,
+    "python.defaultInterpreterPath": "/home/vchoutas/anaconda3/envs/3d/bin/python"
+}
