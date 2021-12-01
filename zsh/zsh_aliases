@@ -1,17 +1,39 @@
-alias update_torch="$HOME/torch/update.sh"
-
-# Alias to open correct ipython
 alias ipy="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
 
-# Git status abbreviation
-alias gst='git status'
-
-# Get my IP address
+# get my IP address
 alias myip="curl http://ipecho.net/plain; echo"
 # Better df
 alias df="pydf"
+alias gst="git status --column"
 
-# Move files to trash
+alias pwdopen="xdg-open $PWD"
+
+alias pwdopen="xdg-open $PWD"
+
+function psdownload {
+    if [ ! "$#" -gt 0 ]; then echo "Need a path to download!"; return 1; fi
+    if [ -z $1 ]; then
+        echo $(realpath .)
+        rsync -arv --progress ps-work:"$1" $PWD
+    else
+        rsync -arv --progress ps-work:"$1" $2
+    fi
+}
+
+# Function used to choose the directory where the virtual environments are
+# located
+function setvenvhome {
+    if [ -z $1 ]; then
+        echo "Usage: setvenvhome path_to_virtual env_home"
+        return 1
+    fi
+    echo "Setting virtual environment base dir to $1"
+
+    export PIP_VIRTUALENV_BASE="$1/.virtualenvs"
+    export WORKON_HOME="$1/.virtualenvs"
+    export PROJECT_HOME="$1/Devel"
+}
+
 function trash {
     if [ $# -eq 0 ]; then
         echo "Usage: trash <file1> ... <fileN> <folder1> <folderN>"
@@ -59,4 +81,14 @@ function extract {
       fi
     done
 fi
+}
+
+fif() {
+  if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
+  rg --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}"
+}
+
+eif() {
+  if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
+   fif $1 | xargs -n1 nvim
 }
