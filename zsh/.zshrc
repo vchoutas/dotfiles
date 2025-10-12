@@ -41,7 +41,7 @@ zplug "zsh-users/zsh-history-substring-search", defer:3
 # Suggests command based on command history
 zplug "zsh-users/zsh-autosuggestions", defer:3
 # Syntax highlighting for commands
-zplug "zsh-users/zsh-syntax-highlighting", defer:3
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
 # Pip and Virtualenv utilities
 zplug "plugins/pip", from:oh-my-zsh
 zplug "plugins/virtualenv", from:oh-my-zsh
@@ -110,14 +110,9 @@ export CMAKE_INCLUDE_PATH=$CMAKE_INCLUDE_PATH:"$MKL_HOME/include"
 export CMAKE_LIBRARY_PATH=$CMAKE_LIBRARY_PATH:"$MKL_HOME/lib/intel64"
 
 
-if [[ -a $HOME/torch/install/bin/torch-activate ]]; then
-  . $HOME/torch/install/bin/torch-activate
-fi
-
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=white,bold,bg=black'
-
-ZSH_HIGHLIGHT_STYLES[globbing]='fg=yellow,bold'
-ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=white,bold,bg=red')
+# ZSH_HIGHLIGHT_STYLES[globbing]='fg=yellow,bold'
+# ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=white,bold,bg=red')
 
 bindkey '^k' autosuggest-accept
 bindkey "^f" beginning-of-line
@@ -145,10 +140,17 @@ export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat 
 if [ -f ~/.fzf_commands ]; then
     source ~/.fzf_commands
 fi
+if [ -f /usr/share/fzf/key-bindings.zsh ]; then
+    source /usr/share/fzf/key-bindings.zsh
+fi
+
 
 export WORKON_HOME="$HOME/.virtualenvs"
 export PROJECT_HOME=$HOME/Devel
-source "$HOME/.local/bin/virtualenvwrapper.sh"
+# source "$HOME/.local/bin/virtualenvwrapper.sh"
+#
+export GOPATH=$HOME/go
+export PATH="$GOPATH/bin:$PATH"
 
 export VIRTUAL_ENV_DISABLE_PROMPT=
 
@@ -159,17 +161,12 @@ if [[ ! "$SSH_AUTH_SOCK" ]]; then
     source "$XDG_RUNTIME_DIR/ssh-agent.env" >/dev/null
 fi
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/vchoutas/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/vchoutas/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/vchoutas/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/vchoutas/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
 # <<< conda initialize <<<
+#
+#
+# if [ -n "$DESKTOP_SESSION" ];then
+    # eval $(gnome-keyring-daemon --start)
+    # export SSH_AUTH_SOCK
+# fi
+
+. "$HOME/.local/share/../bin/env"
