@@ -58,7 +58,6 @@
     },
     "cmake.configureOnOpen": true,
     "C_Cpp.default.cppStandard": "c++11",
-    "terminal.integrated.shell.linux": "/bin/zsh",
     "liveshare.authenticationProvider": "GitHub",
     "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 4 }",
     "workbench.editorAssociations": {
@@ -73,13 +72,17 @@
         "editor.rulers": [
             80,
             120
-        ]
+        ],
+        "editor.formatOnType": true
     },
     "sync-rsync.exclude": [
         ".git",
         ".vscode",
         "images",
-        "samples"
+        "samples",
+        "data",
+        "fitting_output",
+        "fitting_output_perspective"
     ],
     "pythonIndent.trimLinesWithOnlyWhitespace": true,
     "editor.fontSize": 12,
@@ -92,8 +95,58 @@
         "E402"
     ],
     "sync-rsync.autoShowOutputOnError": false,
-    "terminal.integrated.defaultProfile.linux": "zsh",
-    "sync-rsync.onSaveIndividual": true,
+    "terminal.integrated.defaultProfile.linux": "/bin/zsh (migrated)",
     "python.analysis.autoImportCompletions": false,
-    "python.defaultInterpreterPath": "/home/vchoutas/anaconda3/envs/3d/bin/python"
+    "python.defaultInterpreterPath": "/home/vchoutas/anaconda3/envs/pytorch3d/bin/python",
+    "terminal.integrated.profiles.linux": {
+        "/bin/zsh (migrated)": {
+            "path": "/bin/zsh",
+            "args": []
+        }
+    },
+    "sync-rsync.remote": "",
+    "latex-workshop.view.pdf.viewer": "external",
+    "latex-workshop.latex.autoBuild.run": "onSave",
+    "latex-workshop.latex.autoClean.run": "onFailed",
+    "grammarly.files.exclude": [
+        "*.bib",
+        "definitions.tex"
+    ],
+    "yapf.args": [
+        "--style",
+        "{based_on_style: google, indent_width: 2}"
+    ],
+    "[python]": {
+        "editor.formatOnSaveMode": "file",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "eeyore.yapf",
+        "editor.formatOnType": false
+    },
+    "geminicodeassist.project": "thematic-vertex-308412",
+    "editor.tabSize": 2,
+    "latex-workshop.latex.clean.fileTypes": [
+        "%DOCFILE%.aux",
+        "%DOCFILE%.bbl",
+        "%DOCFILE%.blg",
+        "%DOCFILE%.idx",
+        "%DOCFILE%.ind",
+        "%DOCFILE%.lof",
+        "%DOCFILE%.lot",
+        "%DOCFILE%.out",
+        "%DOCFILE%.toc",
+        "%DOCFILE%.acn",
+        "%DOCFILE%.acr",
+        "%DOCFILE%.alg",
+        "%DOCFILE%.glg",
+        "%DOCFILE%.glo",
+        "%DOCFILE%.gls",
+        "%DOCFILE%.fls",
+        "%DOCFILE%.fdb_latexmk",
+        "%DOCFILE%.snm",
+        "%DOCFILE%.synctex(busy)",
+        "%DOCFILE%.synctex.gz(busy)",
+        "%DOCFILE%.nav",
+        "%DOCFILE%.vrb"
+    ],
+    "latex-workshop.formatting.latex": "latexindent",
 }
